@@ -1,0 +1,23 @@
+{
+	"development": {
+		"username": "root",
+		"password": "Sourab 11",
+		"database": "restful_api",
+		"host": "127.0.0.1",
+		"dialect": "mysql"
+	},
+	"test": {
+		"username": "root",
+		"password": "Sourab 11",
+		"database": "restful_api",
+		"host": "127.0.0.1",
+		"dialect": "mysql"
+	},
+	"production": {
+		"username": "root",
+		"password": "Sourab 11",
+		"database": "restful_api",
+		"host": "127.0.0.1",
+		"dialect": "mysql"
+	}
+}
