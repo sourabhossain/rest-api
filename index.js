@@ -3,20 +3,22 @@ const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-const mongoString = process.env.DATABASE_URL;
-
-mongoose.connect(mongoString);
-const database = mongoose.connection;
-
-database.on("error", (error) => {
-	console.log(error);
-});
-
-database.once("connected", () => {
-	console.log("Database Connected");
-});
 const app = express();
+const DB = process.env.DATABASE_URL;
+
+mongoose
+	.connect(DB, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
+	.then(() => {
+		console.log("Successfully connected ");
+	})
+	.catch((error) => {
+		console.log(`can not connect to database, ${error}`);
+	});
 
 app.use(bodyParser.json());
 app.use(cors());
