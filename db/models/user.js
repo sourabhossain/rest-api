@@ -20,18 +20,21 @@ module.exports = (sequelize, DataTypes) => {
 			paranoid: true,
 		}
 	);
+
 	User.getUserById = (id, include = null, scope = null) => {
 		return scope
 			? User.scope(scope).findByPk(id, { include })
 			: User.findByPk(id, { include });
 	};
+
 	User.getUser = (query, scope = null) => {
 		return scope ? User.scope(scope).findOne(query) : User.findOne(query);
 	};
+
 	User.getUsers = (query) => {
-		query = removeDuplicateEntryCount(query);
 		return User.findAndCountAll(query);
 	};
+
 	User.createUser = (data, transaction = null) => {
 		const model = {};
 
