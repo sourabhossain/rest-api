@@ -67,6 +67,9 @@ router.get("/users", async (req, res) => {
 						include: {
 							model: "AdditionalInfo",
 							as: "AdditionalInfo",
+							query: {
+								and: [{ age: 35 }, { phone: 181245 }],
+							},
 						},
 					},
 					attributes: [
@@ -99,7 +102,8 @@ router.get("/users", async (req, res) => {
 		};
 
 		const hashTable = {
-			AdditionalInfo: (name) => print(name),
+			AdditionalInfo: (query) => print(query),
+			UserInfo: (query) => print(query),
 		};
 
 		const test = iterativeExtraction(
@@ -112,10 +116,10 @@ router.get("/users", async (req, res) => {
 			test
 		);
 
-		// console.log(
-		// 	"🚀 ~ file: routes.js ~ line 76 ~ iterativeExtraction ~ json",
-		// 	JSON.stringify(json, null, 4)
-		// );
+		console.log(
+			"🚀 ~ file: routes.js ~ line 76 ~ iterativeExtraction ~ json",
+			JSON.stringify(json, null, 4)
+		);
 
 		const { query } = req;
 		// console.log(
@@ -139,42 +143,31 @@ const print = (name) => {
 	console.log("!!--> name", name);
 };
 
-const iterativeExtraction = (json, hashTable) => {
-	const keys = Object.keys(json);
+const iterativeExtraction = (json, noSqlModels) => {
+	let result = {};
 
-	for (const key of keys) {
+	Object.keys(json).forEach((key) => {
 		if (json[key] && typeof json[key] === "object") {
 			if (
 				key === "include" &&
-				hashTable.hasOwnProperty(json[key]?.model)
+				noSqlModels?.hasOwnProperty(json[key]?.model)
 			) {
-				const noSQLpart = json[key];
-				console.log(
-					"🚀 ~ file: routes.js ~ line 152 ~ iterativeExtraction ~ noSQLpart",
-					noSQLpart
-				);
+				result = {
+					...result,
+					...json[key],
+					modelFunction: noSqlModels[json[key]?.model],
+				};
 				delete json[key];
-				return noSQLpart;
 			}
 
-			return iterativeExtraction(json[key] || {}, hashTable);
+			result = {
+				...result,
+				...iterativeExtraction(json[key] || {}, noSqlModels),
+			};
 		}
-	}
+	});
 
-	// Object.keys(json).forEach((key) => {
-	// 	if (json[key] && typeof json[key] === "object") {
-	// 		if (
-	// 			key === "include" &&
-	// 			hashTable.hasOwnProperty(json[key]?.model)
-	// 		) {
-	// 			const noSql = json[key];
-	// 			delete json[key];
-	// 			return noSql;
-	// 		}
-
-	// 		return iterativeExtraction(json[key] || {}, hashTable);
-	// 	}
-	// });
+	return result;
 };
 
 //Get by ID Method
