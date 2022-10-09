@@ -2,6 +2,7 @@ const express = require("express");
 const Model = require("../models/model");
 const router = express.Router();
 const mongooseQueryParser = require("lib-mongoose-query");
+const mongooseQueryTransform = require("./../mongooseQueryTransform");
 const db = require("./../db/models");
 
 //Post Method
@@ -41,85 +42,21 @@ router.post("/users", async (req, res) => {
 //Get all Method
 router.get("/users", async (req, res) => {
 	try {
+		const noSqlModels = {
+			Role: (query) => console.log(query),
+		};
+		const transform = await mongooseQueryTransform.transform(
+			req,
+			noSqlModels
+		);
+
+		console.log(
+			"🚀 ~ file: routes.js ~ line 50 ~ router.get ~ transform",
+			transform
+		);
 		// const query = await mongooseQueryParser.parse(req);
 		// const data = await Model.find(query);
 		// res.json(data);
-		const json = {
-			include: [
-				{
-					model: "User",
-					as: "user",
-				},
-				{
-					model: "BookingHealthcarePerson",
-					as: "bookingHealthcarePerson",
-					include: {
-						model: "Employee",
-						as: "employee",
-						attributes: [
-							"profile_picture",
-							"name",
-							"name_furigana",
-							"mobile_no",
-							"email",
-							"id",
-						],
-						include: {
-							model: "AdditionalInfo",
-							as: "AdditionalInfo",
-							query: {
-								and: [{ age: 35 }, { phone: 181245 }],
-							},
-						},
-					},
-					attributes: [
-						"employeeId",
-						"type",
-						"bookingId",
-						"startTime",
-						"endTime",
-					],
-				},
-				{
-					model: "Treatment",
-					as: "treatment",
-					attributes: ["name"],
-				},
-				{
-					model: "Problem",
-					as: "problem",
-					attributes: ["name"],
-				},
-				{
-					model: "BookingTreatment",
-					as: "bookingTreatment",
-				},
-			],
-		};
-
-		const parentHashTable = {
-			AdditionalInfo: "Employee",
-		};
-
-		const hashTable = {
-			AdditionalInfo: (query) => print(query),
-			UserInfo: (query) => print(query),
-		};
-
-		const test = iterativeExtraction(
-			json,
-			// { ...parentHashTable },
-			hashTable
-		);
-		console.log(
-			"🚀 ~ file: routes.js ~ line 99 ~ router.get ~ noSQLpart",
-			test
-		);
-
-		console.log(
-			"🚀 ~ file: routes.js ~ line 76 ~ iterativeExtraction ~ json",
-			JSON.stringify(json, null, 4)
-		);
 
 		const { query } = req;
 		// console.log(
