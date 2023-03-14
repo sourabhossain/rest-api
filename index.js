@@ -3,6 +3,7 @@ const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const RedisClient = require("./modules/redis/redis");
 
 const app = express();
 const DB = process.env.DATABASE_URL;
