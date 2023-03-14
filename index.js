@@ -3,10 +3,11 @@ const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-require("dotenv").config();
 
 const app = express();
 const DB = process.env.DATABASE_URL;
+
+mongoose.set("strictQuery", false);
 
 mongoose
 	.connect(DB, {
@@ -14,10 +15,10 @@ mongoose
 		useUnifiedTopology: true,
 	})
 	.then(() => {
-		console.log("Successfully connected ");
+		console.debug("Successfully connected ");
 	})
 	.catch((error) => {
-		console.log(`can not connect to database, ${error}`);
+		console.debug(`can not connect to database, ${error}`);
 	});
 
 app.use(bodyParser.json());
@@ -43,5 +44,5 @@ app.use((err, req, res) => {
 });
 
 app.listen(3000, () => {
-	console.log(`Server Started at ${3000}`);
+	console.debug(`Server Started at ${3000}`);
 });
