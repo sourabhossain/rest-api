@@ -1,7 +1,6 @@
 const express = require("express");
 const User = require("../models/user");
 const router = express.Router();
-const mongooseQueryParser = require("lib-mongoose-query");
 const db = require("./../db/models");
 
 //Post Method
@@ -35,8 +34,7 @@ router.post("/users", async (req, res) => {
 //Get all Method
 router.get("/users", async (req, res) => {
 	try {
-		const query = await mongooseQueryParser.parse(req);
-		const data = await User.find(query);
+		const data = await User.find(req.query);
 		res.json(data);
 	} catch (error) {
 		res.status(500).json({ message: error.message });

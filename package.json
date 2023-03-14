@@ -1,5 +1,5 @@
 {
-	"name": "rest-api-express-mongo",
+	"name": "rest-api",
 	"version": "1.0.0",
 	"description": "",
 	"type": "commonjs",
@@ -12,9 +12,10 @@
 		"seed:undo:all": "sequelize db:seed:undo:all",
 		"migrate:undo": "sequelize db:migrate:undo",
 		"migrate:undo:all": "sequelize db:migrate:undo:all",
-		"migrate:reset": "npm run migrate:undo:all && npm run migrate && npm run seed"
+		"migrate:reset": "npm run migrate:undo:all && npm run migrate && npm run seed",
+		"dotenv": "cp .env.example .env"
 	},
-	"author": "",
+	"author": "Sourab Hossain",
 	"license": "ISC",
 	"dependencies": {
 		"bluebird": "^3.7.2",
@@ -23,7 +24,6 @@
 		"dotenv": "^16.0.2",
 		"express": "^4.17.3",
 		"express-validator": "^6.14.2",
-		"lib-mongoose-query": "/home/programmer/Documents/lib-mongoose-query",
 		"mongoose": "^6.2.2",
 		"mysql2": "^2.3.3",
 		"nodemon": "^2.0.15",
